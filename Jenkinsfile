@@ -4,6 +4,10 @@ pipeline {
         maven 'Maven 3.9.9'
         dockerTool 'Docker'
     }
+    environment {
+            PATH = "/opt/homebrew/bin/aws"
+            ECR_REGISTRY = '481665105260.dkr.ecr.eu-west-1.amazonaws.com'
+        }
 
     stages {
         stage('Build Maven') {
@@ -39,7 +43,7 @@ pipeline {
                                                             usernameVariable: 'AWS-ECR_USERNAME',
                                                             passwordVariable: 'AWS-ECR_PASSWORD'
                                                         )]) {
-                            sh "aws ecr get-login-password --region region eu-west-1 | docker login --username AWS --password-stdin 481665105260.dkr.ecr.eu-west-1.amazonaws.com"
+                            sh "aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
                         }
                     }
                 }
@@ -47,7 +51,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 481665105260.dkr.ecr.eu-west-1.amazonaws.com
+                        aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${ECR_REGISTRY}
                         docker tag jobly-jobs:latest 481665105260.dkr.ecr.eu-west-1.amazonaws.com/jobly/jobs:latest
                         docker push 481665105260.dkr.ecr.eu-west-1.amazonaws.com/jobly/jobs:latest
                     '''
