@@ -32,13 +32,20 @@ pipeline {
                 }
             }
         }
+        stage('Logging into AWS ECR') {
+                    steps {
+                        withCredentials([usernamePassword(
+                                                            credentialsId: 'aws-ecr-credentials',
+                                                            usernameVariable: 'AWS-ECR_USERNAME',
+                                                            passwordVariable: 'AWS-ECR_PASSWORD'
+                                                        )]) {
+                            sh "aws ecr get-login-password --region region eu-west-1 | docker login --username AWS --password-stdin 481665105260.dkr.ecr.eu-west-1.amazonaws.com"
+                        }
+                    }
+                }
         stage('Push to AWS ECR') {
             steps {
-                withCredentials([usernamePassword(
-                                    credentialsId: 'aws-ecr-credentials',
-                                    usernameVariable: 'AWS-ECR_USERNAME',
-                                    passwordVariable: 'AWS-ECR_PASSWORD'
-                                )]) {
+                script {
                     sh '''
                         aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 481665105260.dkr.ecr.eu-west-1.amazonaws.com
                         docker tag jobly-jobs:latest 481665105260.dkr.ecr.eu-west-1.amazonaws.com/jobly/jobs:latest
