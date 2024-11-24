@@ -5,6 +5,7 @@ pipeline {
         dockerTool 'Docker'
     }
     environment {
+            PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin/aws"
             ECR_REGISTRY = '481665105260.dkr.ecr.eu-west-1.amazonaws.com'
         }
 
