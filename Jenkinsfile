@@ -44,7 +44,7 @@ pipeline {
                         docker tag jobly-jobs:latest 481665105260.dkr.ecr.eu-west-1.amazonaws.com/jobly/jobs:latest
                         docker push 481665105260.dkr.ecr.eu-west-1.amazonaws.com/jobly/jobs:latest
                     '''
-                    }
+
                 }
             }
         }
