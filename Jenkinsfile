@@ -5,7 +5,6 @@ pipeline {
         dockerTool 'Docker'
     }
     environment {
-            PATH = "/opt/homebrew/bin/aws"
             ECR_REGISTRY = '481665105260.dkr.ecr.eu-west-1.amazonaws.com'
         }
 
@@ -38,11 +37,10 @@ pipeline {
         }
         stage('Logging into AWS ECR') {
                     steps {
-                        withCredentials([usernamePassword(
-                                                            credentialsId: 'aws-ecr-credentials',
-                                                            usernameVariable: 'AWS-ECR_USERNAME',
-                                                            passwordVariable: 'AWS-ECR_PASSWORD'
-                                                        )]) {
+                        withCredentials([[$class: 'UsernamePasswordMultiBinding',
+                                            credentialsId: 'aws-ecr-credentials', u
+                                            usernameVariable: 'AWS_ACCESS_KEY_ID',
+                                            passwordVariable: 'AWS_SECRET_ACCESS_KEY']])  {
                             sh "aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
                         }
                     }
