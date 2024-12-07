@@ -16,18 +16,7 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-        stage('Verify Tools') {
-            steps {
-                sh """
-                    echo "Testing AWS CLI..."
-                    ${AWS_CLI_PATH} --version
 
-                    echo "Testing Docker..."
-                    ${DOCKER_PATH} --version
-                    ${DOCKER_PATH} ps
-                """
-            }
-        }
 
         stage('Unit Test') {
             steps {
