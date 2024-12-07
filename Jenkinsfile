@@ -5,10 +5,10 @@ pipeline {
         dockerTool 'Docker'
     }
     environment {
-            PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin/aws"
+            AWS_CLI_PATH = '/opt/homebrew/bin/aws'
             ECR_REGISTRY = '481665105260.dkr.ecr.eu-west-1.amazonaws.com'
+            DOCKER_PATH = '/opt/homebrew/bin/docker'
         }
-
     stages {
         stage('Build Maven') {
             steps {
@@ -16,53 +16,72 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
+        stage('Verify Tools') {
+            steps {
+                sh """
+                    echo "Testing AWS CLI..."
+                    ${AWS_CLI_PATH} --version
+
+                    echo "Testing Docker..."
+                    ${DOCKER_PATH} --version
+                    ${DOCKER_PATH} ps
+                """
+            }
+        }
+
         stage('Unit Test') {
             steps {
                 sh 'mvn test'
             }
         }
-        stage('Build Docker Image') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'docker-hub-credentials',
-                    usernameVariable: 'DOCKER_USERNAME',
-                    passwordVariable: 'DOCKER_PASSWORD'
-                )]) {
-                    sh '''
-                        mvn compile jib:build \
-                        -Djib.to.auth.username=${DOCKER_USERNAME} \
-                        -Djib.to.auth.password=${DOCKER_PASSWORD}
-                    '''
+
+        stage('Logging into AWS ECR') {
+                steps {
+                    withCredentials([[$class: 'UsernamePasswordMultiBinding',
+                        credentialsId: 'aws-ecr-credentials',
+                        usernameVariable: 'AWS_ACCESS_KEY_ID',
+                        passwordVariable: 'AWS_SECRET_ACCESS_KEY']])  {
+                                script {
+
+                sh """
+                    mkdir -p /tmp/.docker
+                    echo '{"credsStore":""}' > /tmp/.docker/config.json
+                """
+
+                withEnv(['DOCKER_CONFIG=/tmp/.docker']) {
+                    sh """
+                        ${AWS_CLI_PATH} ecr get-login-password --region eu-west-1 | \
+                        ${DOCKER_PATH} login \
+                            --username AWS \
+                            --password-stdin \
+                            ${ECR_REGISTRY}
+                    """
+                }
+                    }
                 }
             }
         }
-        stage('Logging into AWS ECR') {
-                    steps {
-                        withCredentials([[$class: 'UsernamePasswordMultiBinding',
-                                            credentialsId: 'aws-ecr-credentials',
-                                            usernameVariable: 'AWS_ACCESS_KEY_ID',
-                                            passwordVariable: 'AWS_SECRET_ACCESS_KEY']])  {
-                            sh "aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
-                        }
-                    }
-                }
-        stage('Push to AWS ECR') {
-            steps {
-                script {
-                    sh '''
-                        aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin ${ECR_REGISTRY}
-                        docker tag jobly-jobs:latest 481665105260.dkr.ecr.eu-west-1.amazonaws.com/jobly/jobs:latest
-                        docker push 481665105260.dkr.ecr.eu-west-1.amazonaws.com/jobly/jobs:latest
-                    '''
 
+        stage('Build Docker Image') {
+            steps {
+                withCredentials([[$class: 'UsernamePasswordMultiBinding',
+                    credentialsId: 'aws-ecr-credentials',
+                    usernameVariable: 'AWS_ACCESS_KEY_ID',
+                    passwordVariable: 'AWS_SECRET_ACCESS_KEY']]) {
+                    sh """
+                        mvn compile jib:build \
+                        -Djib.to.image=${ECR_REGISTRY}/jobly/jobs:latest \
+                        -Djib.to.auth.username=AWS \
+                        -Djib.to.auth.password=\$(${AWS_CLI_PATH} ecr get-login-password --region eu-west-1)
+                    """
                 }
             }
         }
     }
     post {
         always {
-            junit '**/target/surefire-reports/*.xml'
-            archiveArtifacts artifacts: '**/target/*.jar', allowEmptyArchive: true
+            junit '/target/surefire-reports/*.xml'
+            archiveArtifacts artifacts: '/target/*.jar', allowEmptyArchive: true
         }
     }
 }
