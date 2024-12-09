@@ -1,4 +1,4 @@
-package com.jobly_jobs.controller;
+package com.jobly_jobs.rest.controller;
 
 import com.jobly_jobs.domain.dto.request.JobDescriptionInputDto;
 import com.jobly_jobs.domain.dto.response.GeneratedVacancyDto;
