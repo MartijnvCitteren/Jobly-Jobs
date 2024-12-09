@@ -1,4 +1,4 @@
-package com.jobly_jobs.domain.Entity;
+package com.jobly_jobs.domain.entity;
 
 import jakarta.persistence.MappedSuperclass;
 import lombok.AccessLevel;

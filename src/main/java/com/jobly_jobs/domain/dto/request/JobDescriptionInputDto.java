@@ -8,7 +8,7 @@ public record JobDescriptionInputDto(
         String tasks,
         String skills,
         String teamDescription,
-        GeneralJobDescriptionInfo generalInfo
+        GeneralJobDescriptionInfoDto generalInfo
 
 ) {
 }

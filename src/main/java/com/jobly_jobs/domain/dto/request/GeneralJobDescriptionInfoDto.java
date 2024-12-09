@@ -6,7 +6,7 @@ import lombok.Builder;
 import java.math.BigDecimal;
 
 @Builder
-public record GeneralJobDescriptionInfo(
+public record GeneralJobDescriptionInfoDto(
         String jobTitle,
         FunctionGroup functionGroup,
         String companyName,
