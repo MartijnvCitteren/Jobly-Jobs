@@ -18,7 +18,7 @@ public class JobCreationMapperTest {
         GeneralJobDescriptionInfoDto jobInfo = GeneralJobInfoDtoFactory.createGeneralInfoDto().build();
 
         // When
-        JobCreationRequest result = JobCreationMapper.mapToNewJobCreationRequest(jobInfo);
+        JobCreationRequest result = JobCreationMapper.toNewJobCreationRequest(jobInfo);
 
         // Then
         assertEquals(jobInfo.jobTitle(), result.getJobTitle());

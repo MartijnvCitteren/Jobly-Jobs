@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class JobCreationMapper {
 
-    public static JobCreationRequest mapToNewJobCreationRequest(GeneralJobDescriptionInfoDto jobInfo) {
+    public static JobCreationRequest toNewJobCreationRequest(GeneralJobDescriptionInfoDto jobInfo) {
         JobCreationRequest jobCreationRequest = new JobCreationRequest();
         jobCreationRequest.setJobTitle(jobInfo.jobTitle());
         jobCreationRequest.setFunctionGroup(jobInfo.functionGroup());

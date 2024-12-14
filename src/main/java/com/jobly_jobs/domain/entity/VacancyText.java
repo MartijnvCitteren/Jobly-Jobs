@@ -1,6 +1,5 @@
 package com.jobly_jobs.domain.entity;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,14 +11,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-import java.util.UUID;
 
 @Builder
 @Table(name = "vacancy_text")
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class VacancyText extends GenericEntity{
+public class VacancyText extends GenericEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -35,7 +33,6 @@ public class VacancyText extends GenericEntity{
     @OneToOne
     @JoinColumn(referencedColumnName = "job_creation_id")
     private JobCreationRequest jobCreationRequest;
-
 
 
 }
