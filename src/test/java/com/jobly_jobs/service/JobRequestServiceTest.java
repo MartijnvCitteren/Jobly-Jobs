@@ -12,7 +12,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataAccessException;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -42,7 +44,7 @@ class JobRequestServiceTest {
     GeneralJobDescriptionInfoDto jobInfo = GeneralJobInfoDtoFactory.createGeneralInfoDto().build();
 
     // When
-    when(jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndRequestDateAfter(
+    when(jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(
                 anyString(), any(FunctionGroup.class), anyString(), any(LocalDateTime.class))) .thenReturn(Optional.empty());
     jobRequestService.createJobRequest(jobInfo);
 
@@ -57,7 +59,7 @@ class JobRequestServiceTest {
         JobCreationRequest existingJobRequest = new JobCreationRequest();
 
         // When & Then
-        when(jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndRequestDateAfter(
+        when(jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(
                 anyString(), any(FunctionGroup.class), anyString(), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(existingJobRequest));
         JobRequestAlreadyExists exception = assertThrows(JobRequestAlreadyExists.class, () ->
@@ -67,6 +69,17 @@ class JobRequestServiceTest {
         verify(jobCreationRepository, never()).save(any(JobCreationRequest.class));
     }
 
+    // add test where you throw a data access exception
+    @Test
+    void givenADataAccessException_whenTheJobRequestIsCreated_thenThrowDataAccessException() {
+        // Given
+        DataAccessException dataAccessException = Mockito.mock(DataAccessException.class);
+        GeneralJobDescriptionInfoDto jobInfo = GeneralJobInfoDtoFactory.createGeneralInfoDto().build();
 
+        // When & then
+        when(jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(
+                anyString(), any(FunctionGroup.class), anyString(), any(LocalDateTime.class))).thenThrow(dataAccessException);
+        assertThrows(DataAccessException.class, () -> jobRequestService.createJobRequest(jobInfo));
+    }
 
 }

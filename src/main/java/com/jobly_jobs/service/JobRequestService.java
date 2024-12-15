@@ -45,7 +45,7 @@ public class JobRequestService {
     }
 
     private Optional<JobCreationRequest> findSimilarJobRequest(GeneralJobDescriptionInfoDto jobInfo) {
-        return jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndRequestDateAfter(jobInfo.jobTitle(),
+        return jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(jobInfo.jobTitle(),
                 jobInfo.functionGroup(), jobInfo.companyName(), LocalDateTime.now().minusWeeks(2));
     }
 }

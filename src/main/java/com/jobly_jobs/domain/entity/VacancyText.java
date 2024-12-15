@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 
 @Builder
@@ -31,7 +32,7 @@ public class VacancyText extends GenericEntity {
     private String offer;
     private String contactInformation;
     @OneToOne
-    @JoinColumn(referencedColumnName = "job_creation_id")
+    @JoinColumn(name = "job_creation_uuid", referencedColumnName = "job_creation_uuid")
     private JobCreationRequest jobCreationRequest;
 
 

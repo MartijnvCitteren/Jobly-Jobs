@@ -8,7 +8,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@ExtendWith(MockitoExtension.class)
 public class JobCreationRequestFactory {
 
     public static JobCreationRequest.JobCreationRequestBuilder createJobCreationRequest() {

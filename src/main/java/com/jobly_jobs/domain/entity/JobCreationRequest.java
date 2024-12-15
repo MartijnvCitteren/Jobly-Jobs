@@ -16,8 +16,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -33,7 +37,7 @@ public class JobCreationRequest extends GenericEntity {
     @Setter(value = AccessLevel.NONE)
     private long id;
     @Setter(value = AccessLevel.NONE)
-    @Column(name = "job_creation_id")
+    @Column(name = "job_creation_uuid", unique = true)
     private UUID jobCreationId = UUID.randomUUID();
     private String jobTitle;
     private FunctionGroup functionGroup;
@@ -42,6 +46,16 @@ public class JobCreationRequest extends GenericEntity {
     private BigDecimal maxSalary;
     @OneToOne(mappedBy = "jobCreationRequest", cascade = CascadeType.ALL)
     private VacancyText vacancyText;
+
+    public JobCreationRequest(String jobTitle, FunctionGroup functionGroup, String companyName, BigDecimal minSalary, BigDecimal maxSalary, LocalDateTime creationDate, LocalDateTime updateTime) {
+        this.jobTitle = jobTitle;
+        this.functionGroup = functionGroup;
+        this.companyName = companyName;
+        this.minSalary = minSalary;
+        this.maxSalary = maxSalary;
+        this.creationDate = creationDate;
+        this.updateDate = updateTime;
+    }
 
 }
 
