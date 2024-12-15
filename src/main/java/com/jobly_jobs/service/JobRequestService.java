@@ -48,6 +48,4 @@ public class JobRequestService {
         return jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndRequestDateAfter(jobInfo.jobTitle(),
                 jobInfo.functionGroup(), jobInfo.companyName(), LocalDateTime.now().minusWeeks(2));
     }
-
-
 }

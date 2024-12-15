@@ -3,6 +3,7 @@ package com.jobly_jobs.factory;
 import com.jobly_jobs.domain.dto.request.GeneralJobDescriptionInfoDto;
 import com.jobly_jobs.domain.enums.FunctionGroup;
 
+
 import java.math.BigDecimal;
 
 public class GeneralJobInfoDtoFactory {

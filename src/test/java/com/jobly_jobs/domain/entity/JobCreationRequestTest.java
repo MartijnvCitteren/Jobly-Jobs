@@ -1,17 +1,17 @@
 package com.jobly_jobs.domain.entity;
 
 import com.jobly_jobs.factory.JobCreationRequestFactory;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class JobCreationRequestTest {
+class JobCreationRequestTest {
 
     @Test
-    public void givenNewJobCreationRequest_whenCreated_thenJobCreationIdIsNotNull() {
+    void givenNewJobCreationRequest_whenCreated_thenJobCreationIdIsNotNull() {
         //given & when
         JobCreationRequest jobCreationRequest = new JobCreationRequest();
 
@@ -20,7 +20,7 @@ public class JobCreationRequestTest {
     }
 
     @Test
-    public void givenExistingJobCreationRequest_whenGetAnyValue_thenValueIsReturned() {
+    void givenExistingJobCreationRequest_whenGetAnyValue_thenValueIsReturned() {
         //given
         JobCreationRequest jobCreationRequest = JobCreationRequestFactory.createJobCreationRequest().build();
 
