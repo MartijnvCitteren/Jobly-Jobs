@@ -26,7 +26,7 @@ class GlobalExceptionHandlerTest {
         ResponseEntity<Object> responseEntity = globalExceptionHandler.handleDataAccessException(dataAccessException);
 
         // then
-        assertEquals(500, responseEntity.getStatusCodeValue());
+        assertEquals(500, responseEntity.getStatusCode().value());
         assertEquals("Data access exception", responseEntity.getBody());
     }
 
