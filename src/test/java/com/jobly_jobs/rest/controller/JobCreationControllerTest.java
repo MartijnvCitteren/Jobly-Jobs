@@ -21,12 +21,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
-
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(JobCreationController.class)
@@ -71,7 +69,7 @@ class JobCreationControllerTest {
                         .contentType("application/json")
                         .content(convertToJsonString(jobCreationRequestDto)))
                 .andExpect(status().isBadRequest())
-                .andExpect(result -> result.getResponse().getContentAsString().contains("validation failed"));
+                .andExpect(content().string("{\"generalInfo\":\"must not be null\"}"));
     }
 
 
