@@ -5,23 +5,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.jobly_jobs.domain.dto.request.GeneralJobDescriptionInfoDto;
 import com.jobly_jobs.domain.dto.request.JobCreationRequestDto;
-import com.jobly_jobs.domain.dto.response.GeneratedVacancyDto;
 import com.jobly_jobs.factory.GeneralJobInfoDtoFactory;
-import com.jobly_jobs.factory.GeneratedVacancyDtoFactory;
 import com.jobly_jobs.factory.JobCreationRequestDtoFactory;
 import com.jobly_jobs.service.JobRequestService;
 import com.jobly_jobs.service.VacancyTextService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-
-import org.springframework.dao.DataAccessException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -73,7 +67,6 @@ class JobCreationControllerTest {
     }
 
 
-
     private String convertToJsonString(Object object) {
         ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
         try {
@@ -82,7 +75,6 @@ class JobCreationControllerTest {
             throw new RuntimeException(e);
         }
     }
-
 
 
 }

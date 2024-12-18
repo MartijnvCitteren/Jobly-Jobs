@@ -8,10 +8,8 @@ import com.jobly_jobs.factory.GeneralJobInfoDtoFactory;
 import com.jobly_jobs.repository.JobCreationRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataAccessException;
@@ -19,7 +17,8 @@ import org.springframework.dao.DataAccessException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
@@ -39,17 +38,17 @@ class JobRequestServiceTest {
 
 
     @Test
-    void givenAJobRequestIsUnique_whenTheJobRequestIsCreated_thenTheJobRequestIsSaved() {
-    // Given
-    GeneralJobDescriptionInfoDto jobInfo = GeneralJobInfoDtoFactory.createGeneralInfoDto().build();
+    void givenAJobRequestIsUnique_whenTheJobRequestIsCreated_thenTheIsSavedJobRequest() {
+        // Given
+        GeneralJobDescriptionInfoDto jobInfo = GeneralJobInfoDtoFactory.createGeneralInfoDto().build();
 
-    // When
-    when(jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(
-                anyString(), any(FunctionGroup.class), anyString(), any(LocalDateTime.class))) .thenReturn(Optional.empty());
-    jobRequestService.createJobRequest(jobInfo);
+        // When
+        when(jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(
+                anyString(), any(FunctionGroup.class), anyString(), any(LocalDateTime.class))).thenReturn(Optional.empty());
+        jobRequestService.createJobRequest(jobInfo);
 
-    // Then
-    verify(jobCreationRepository, times(1)).save(any(JobCreationRequest.class));
+        // Then
+        verify(jobCreationRepository, times(1)).save(any(JobCreationRequest.class));
     }
 
     @Test
@@ -63,7 +62,7 @@ class JobRequestServiceTest {
                 anyString(), any(FunctionGroup.class), anyString(), any(LocalDateTime.class)))
                 .thenReturn(Optional.of(existingJobRequest));
         JobRequestAlreadyExists exception = assertThrows(JobRequestAlreadyExists.class, () ->
-            jobRequestService.createJobRequest(jobInfo));
+                jobRequestService.createJobRequest(jobInfo));
 
         assertTrue(exception.getMessage().contains("This job creation request looks similar to a recent vacancy creation."));
         verify(jobCreationRepository, never()).save(any(JobCreationRequest.class));

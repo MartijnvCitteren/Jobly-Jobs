@@ -2,8 +2,6 @@ package com.jobly_jobs.factory;
 
 import com.jobly_jobs.domain.entity.JobCreationRequest;
 import com.jobly_jobs.domain.enums.FunctionGroup;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.UUID;

@@ -22,18 +22,18 @@ public class JobRequestService {
 
     public void createJobRequest(GeneralJobDescriptionInfoDto jobInfo) {
         try {
-            if (jobRequestIsUnique(jobInfo)) {
+            if (isUniqueJobRequest(jobInfo)) {
                 JobCreationRequest jobCreationRequest = JobCreationMapper.toNewJobCreationRequest(jobInfo);
                 jobCreationRepository.save(jobCreationRequest);
             }
         } catch (DataAccessException e) {
             log.error("Error while saving job creation request for job: {} and company {}", jobInfo.jobTitle(),
-                                                                                                jobInfo.companyName());
+                    jobInfo.companyName());
             throw e;
         }
     }
 
-    private boolean jobRequestIsUnique(GeneralJobDescriptionInfoDto jobInfo) {
+    private boolean isUniqueJobRequest(GeneralJobDescriptionInfoDto jobInfo) {
         if (findSimilarJobRequest(jobInfo).isPresent()) {
             JobCreationRequest foundJobRequest = findSimilarJobRequest(jobInfo).get();
             String message = "This job creation request looks similar to a recent vacancy creation. " +

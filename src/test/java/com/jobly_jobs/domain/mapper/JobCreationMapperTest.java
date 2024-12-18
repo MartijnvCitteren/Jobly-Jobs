@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 class JobCreationMapperTest {
@@ -27,7 +27,6 @@ class JobCreationMapperTest {
         assertEquals(jobInfo.minSalary(), result.getMinSalary());
         assertEquals(jobInfo.maxSalary(), result.getMaxSalary());
     }
-
 
 
 }

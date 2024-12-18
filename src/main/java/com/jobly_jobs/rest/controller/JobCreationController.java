@@ -2,9 +2,8 @@ package com.jobly_jobs.rest.controller;
 
 import com.jobly_jobs.domain.dto.request.JobCreationRequestDto;
 import com.jobly_jobs.domain.dto.response.GeneratedVacancyDto;
-import com.jobly_jobs.service.VacancyTextService;
 import com.jobly_jobs.service.JobRequestService;
-
+import com.jobly_jobs.service.VacancyTextService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
