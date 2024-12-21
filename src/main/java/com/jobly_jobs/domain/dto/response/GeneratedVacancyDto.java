@@ -5,10 +5,13 @@ import lombok.Builder;
 @Builder
 public record GeneratedVacancyDto(
         String summary,
+        String companyDescription,
+        String teamDescription,
+        String dayToDayDescription,
         String jobDescription,
-        String tasks,
-        String team,
-        String jobOffer,
-        String aboutTheCompany
+        String jobUniqueSellingPoints,
+        String requirements,
+        String offer,
+        String contactInformation
 ) {
 }

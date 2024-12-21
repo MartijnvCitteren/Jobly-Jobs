@@ -3,6 +3,7 @@ package com.jobly_jobs.service;
 import com.jobly_jobs.client.OpenAiClient;
 import com.jobly_jobs.domain.dto.request.JobCreationRequestDto;
 import com.jobly_jobs.domain.dto.response.GeneratedVacancyDto;
+import com.jobly_jobs.promt.PromtCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -15,36 +16,52 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class VacancyTextService {
     private final OpenAiClient openAiClient;
+    private final PromtCreator promtCreator;
+
+    public String testService(String message) {
+        log.debug("Testing testService with message: {}", message);
+        return openAiClient.getResponse(message);
+    }
 
     public GeneratedVacancyDto generatedVacancyText(JobCreationRequestDto inputDto) {
-        Map<String, String> vacancyTextMap = new HashMap<>();
-        new Thread(() -> vacancyTextMap.put("auto", testService("what is a car in 1 sentence?"))).start();
-        new Thread(() -> vacancyTextMap.put("job", testService("what is a job in 1 sentence?"))).start();
-        new Thread(() -> vacancyTextMap.put("company", testService("what is a company in 1 sentence?"))).start();
+        Map<String, String> vacancyTextMap = createHashMapWithGeneratedContend(inputDto);
+        return GeneratedVacancyDto.builder()
+                .summary(vacancyTextMap.get("summary"))
+                .companyDescription(vacancyTextMap.get("companyDescription"))
+                .teamDescription(vacancyTextMap.get("teamDescription"))
+                .dayToDayDescription(vacancyTextMap.get("dayToDayDescription"))
+                .jobDescription(vacancyTextMap.get("jobDescription"))
+                .jobUniqueSellingPoints(vacancyTextMap.get("jobUniqueSellingPoints"))
+                .requirements(vacancyTextMap.get("requirements"))
+                .offer(vacancyTextMap.get("offer"))
+                .contactInformation(vacancyTextMap.get("contactInformation"))
+                .build();
+    }
 
-        while(vacancyTextMap.size() < 3) {
+    private Map<String, String> createHashMapWithGeneratedContend(JobCreationRequestDto input) {
+        Map<String, String> vacancyMap = new HashMap<>();
+        new Thread(() -> vacancyMap.put("companyDescription", generateText(promtCreator.createCompanyDescription(input)))).start();
+        new Thread(() -> vacancyMap.put("teamDescription", generateText(promtCreator.createTeamDescription(input)))).start();
+        new Thread(() -> vacancyMap.put("dayToDayDescription", generateText(promtCreator.createDayToDayDescription(input)))).start();
+        new Thread(() -> vacancyMap.put("jobDescription", generateText(promtCreator.createJobDescription(input)))).start();
+        new Thread(() -> vacancyMap.put("jobUniqueSellingPoints", generateText(promtCreator.createJobUniqueSellingPoints(input)))).start();
+        new Thread(() -> vacancyMap.put("requirements", generateText(promtCreator.createRequirements(input)))).start();
+        new Thread(() -> vacancyMap.put("offer", generateText(promtCreator.createOffer(input)))).start();
+        new Thread(() -> vacancyMap.put("contactInformation", generateText(promtCreator.createContactInformation(input)))).start();
+        new Thread(() -> vacancyMap.put("summary", generateText(promtCreator.createSummary(input)))).start();
+
+        while(vacancyMap.size() < 9) {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {
                 log.error("Thread interrupted", e);
             }
         }
-        System.out.println(vacancyTextMap);
-
-
-        return GeneratedVacancyDto.builder()
-                .summary("here is a nice summary")
-                .aboutTheCompany(" fun company to work for")
-                .team("team is amazing")
-                .tasks("You gonna do all those things")
-                .jobDescription("really challenging")
-                .jobOffer("woooooo that's a nice offer")
-                .build();
+        return vacancyMap;
     }
 
-    public String testService(String message) {
-        log.debug("Testing testService with message: {}", message);
-        return openAiClient.getResponse(message);
+    private String generateText(String promt) {
+        return openAiClient.getResponse(promt);
     }
 
 
