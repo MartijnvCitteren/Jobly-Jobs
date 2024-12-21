@@ -17,7 +17,8 @@ spring:
       dialect: org.hibernate.dialect.PostgreSQLDialect
   ai:
     openai:
-        api-key: ${env.OPENAI_API_KEY}
-        chat:
-          options:
-            model: gpt-4o-mini
+      api-key: ${OPEN_AI_KEY}
+      chat:
+        completions-path: v1/chat/completions
+        options:
+          model: gpt-4o-mini

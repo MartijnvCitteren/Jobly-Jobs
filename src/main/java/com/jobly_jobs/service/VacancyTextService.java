@@ -27,6 +27,7 @@ public class VacancyTextService {
     }
 
     public String testService(String message) {
+        log.debug("Testing testService with message: {}", message);
         return openAiClient.getResponse(message);
     }
 }

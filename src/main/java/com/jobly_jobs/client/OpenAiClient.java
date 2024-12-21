@@ -1,26 +1,28 @@
 package com.jobly_jobs.client;
 
-import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.stereotype.Component;
+import org.springframework.ai.chat.model.ChatResponse;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.stereotype.Service;
 
 
 @Service
+@Log4j2
 public class OpenAiClient {
     private final ChatClient chatClient;
 
-    public OpenAiClient(ChatClient.Builder builder) {
-        this.chatClient = builder
-                .defaultSystem("excute my question exactly")
-                .build();
+    public OpenAiClient(ChatClient chatClient) {
+        log.debug("OpenAiClient created");
+        this.chatClient = chatClient;
     }
 
     public String getResponse(String message) {
-        return chatClient.prompt(message)
+        ChatResponse response = chatClient.prompt()
                 .user(message)
                 .call()
-                .content();
+                .chatResponse();
+        return response.getResult().getOutput().getText();
     }
 
 
