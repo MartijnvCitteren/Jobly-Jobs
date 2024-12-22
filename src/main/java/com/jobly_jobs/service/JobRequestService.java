@@ -1,10 +1,14 @@
 package com.jobly_jobs.service;
 
 import com.jobly_jobs.domain.dto.request.GeneralJobDescriptionInfoDto;
+import com.jobly_jobs.domain.dto.response.GeneratedVacancyDto;
+import com.jobly_jobs.domain.dto.response.JobCreationResponseDto;
 import com.jobly_jobs.domain.entity.JobCreationRequest;
 import com.jobly_jobs.domain.mapper.JobCreationMapper;
+import com.jobly_jobs.domain.mapper.VacancyTextMapper;
 import com.jobly_jobs.exceptions.JobRequestAlreadyExists;
 import com.jobly_jobs.repository.JobCreationRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataAccessException;
@@ -20,15 +24,29 @@ import java.util.Optional;
 public class JobRequestService {
     private final JobCreationRepository jobCreationRepository;
 
-    public void createJobRequest(GeneralJobDescriptionInfoDto jobInfo) {
+    public void createJobRequest(GeneralJobDescriptionInfoDto jobInfo, GeneratedVacancyDto vacancyDto) {
         try {
             if (isUniqueJobRequest(jobInfo)) {
                 JobCreationRequest jobCreationRequest = JobCreationMapper.toNewJobCreationRequest(jobInfo);
+                jobCreationRequest.setVacancyText(VacancyTextMapper.toVacancyText(vacancyDto));
                 jobCreationRepository.save(jobCreationRequest);
             }
+
         } catch (DataAccessException e) {
             log.error("Error while saving job creation request for job: {} and company {}", jobInfo.jobTitle(),
                     jobInfo.companyName());
+            throw e;
+        }
+    }
+
+    public JobCreationResponseDto getJobRequest(long id) {
+        System.out.println("get Job request with ID " + id + " Started");
+        try {
+            JobCreationRequest jobCreationRequest = jobCreationRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Job creation request with id: " + id + " not found"));
+            return JobCreationMapper.toJobCreationResponseDto(jobCreationRequest);
+        } catch (DataAccessException e) {
+            log.error("Error while fetching job creation request with id: {}", id);
             throw e;
         }
     }

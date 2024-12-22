@@ -19,6 +19,5 @@ public record JobCreationRequestDto(
         WritingStyle writingStyle,
         @NotNull
         GeneralJobDescriptionInfoDto generalInfo
-
 ) {
 }

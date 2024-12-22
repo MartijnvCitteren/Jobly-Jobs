@@ -3,6 +3,8 @@ package com.jobly_jobs.service;
 import com.jobly_jobs.client.OpenAiClient;
 import com.jobly_jobs.domain.dto.request.JobCreationRequestDto;
 import com.jobly_jobs.domain.dto.response.GeneratedVacancyDto;
+import com.jobly_jobs.domain.entity.JobCreationRequest;
+import com.jobly_jobs.domain.entity.VacancyText;
 import com.jobly_jobs.promt.PromtCreator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -18,10 +20,6 @@ public class VacancyTextService {
     private final OpenAiClient openAiClient;
     private final PromtCreator promtCreator;
 
-    public String testService(String message) {
-        log.debug("Testing testService with message: {}", message);
-        return openAiClient.getResponse(message);
-    }
 
     public GeneratedVacancyDto generatedVacancyText(JobCreationRequestDto inputDto) {
         Map<String, String> vacancyTextMap = createHashMapWithGeneratedContend(inputDto);
@@ -60,8 +58,8 @@ public class VacancyTextService {
         return vacancyMap;
     }
 
-    private String generateText(String promt) {
-        return openAiClient.getResponse(promt);
+    private String generateText(String prompt) {
+        return openAiClient.getResponse(prompt);
     }
 
 
