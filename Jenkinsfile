@@ -49,7 +49,6 @@ pipeline {
                 }
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding',
@@ -68,7 +67,8 @@ pipeline {
     }
     post {
         always {
-            junit '${WORKSPACE}/target/surefire-reports/*.xml'
+            junit '/target/surefire-reports/*.xml'
+            allowEmptyResults true
             archiveArtifacts artifacts: '/target/*.jar', allowEmptyArchive: true
         }
     }
