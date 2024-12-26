@@ -13,7 +13,7 @@ pipeline {
         stage('Build Maven') {
             steps {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/MartijnvCitteren/Jobly-Jobs']])
-                sh 'mvn install -DskipTests'
+                sh 'mvn clean install -DskipTests'
             }
         }
 
