@@ -68,7 +68,8 @@ pipeline {
     }
     post {
         always {
-            junit '/Jobly-Jobs/target/surefire-reports/*.xml'
+            junit '/target/surefire-reports/*.xml'
+            allowEmptyResults true
             archiveArtifacts artifacts: '/target/*.jar', allowEmptyArchive: true
         }
     }
