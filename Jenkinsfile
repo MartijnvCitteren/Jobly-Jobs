@@ -49,7 +49,6 @@ pipeline {
                 }
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding',
