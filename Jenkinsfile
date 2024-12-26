@@ -68,7 +68,7 @@ pipeline {
     }
     post {
         always {
-            junit '${WORKSPACE}/target/surefire-reports/*.xml'
+            junit '/Jobly-Jobs/target/surefire-reports/*.xml'
             archiveArtifacts artifacts: '/target/*.jar', allowEmptyArchive: true
         }
     }
