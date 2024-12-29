@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -33,15 +34,12 @@ public class JobCreationRequest extends GenericEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(value = AccessLevel.NONE)
     private long id;
-    @Setter(value = AccessLevel.NONE)
-    @Column(name = "job_creation_uuid", unique = true)
-    private UUID jobCreationId = UUID.randomUUID();
     private String jobTitle;
     private FunctionGroup functionGroup;
     private String companyName;
     private BigDecimal minSalary;
     private BigDecimal maxSalary;
-    @OneToOne(mappedBy = "jobCreationRequest", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     private VacancyText vacancyText;
 
     public JobCreationRequest(String jobTitle, FunctionGroup functionGroup, String companyName, BigDecimal minSalary, BigDecimal maxSalary, LocalDateTime creationDate, LocalDateTime updateTime) {

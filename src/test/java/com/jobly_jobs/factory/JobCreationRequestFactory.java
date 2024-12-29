@@ -10,7 +10,6 @@ public class JobCreationRequestFactory {
 
     public static JobCreationRequest.JobCreationRequestBuilder createJobCreationRequest() {
         return JobCreationRequest.builder()
-                .jobCreationId(UUID.fromString("123e4567-e89b-12d3-a456-426614174000"))
                 .jobTitle("Software Engineer")
                 .functionGroup(FunctionGroup.valueOf("ENGINEERING"))
                 .companyName("Google")

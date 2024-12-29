@@ -55,7 +55,7 @@ public class JobRequestService {
         if (findSimilarJobRequest(jobInfo).isPresent()) {
             JobCreationRequest foundJobRequest = findSimilarJobRequest(jobInfo).get();
             String message = "This job creation request looks similar to a recent vacancy creation. " +
-                    "The similar request has job creation id: " + foundJobRequest.getJobCreationId().toString() + ".";
+                    "The similar request has job creation id: " + foundJobRequest.getId() + ".";
             log.info(message);
             throw new JobRequestAlreadyExists(message);
         }

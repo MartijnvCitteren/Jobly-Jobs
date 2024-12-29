@@ -5,7 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
+
+import jakarta.persistence.Lob;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -14,7 +15,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.Length;
 
 
 @Builder
@@ -29,27 +29,33 @@ public class VacancyText extends GenericEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(value = AccessLevel.NONE)
     private Long id;
-    @Column(length = 1000)
+    @Lob
+    @Column(columnDefinition = "text")
     private String summary;
-    @Column(length = 1500)
+    @Lob
+    @Column(columnDefinition = "text")
     private String companyDescription;
-    @Column(length = 2500)
+    @Lob
+    @Column(columnDefinition = "text")
     private String teamDescription;
-    @Column(length = 2500)
+    @Lob
+    @Column(columnDefinition = "text")
     private String dayToDayDescription;
-    @Column(length = 2500)
+    @Lob
+    @Column(columnDefinition = "text")
     private String jobDescription;
-    @Column(length = 2500)
+    @Lob
+    @Column(columnDefinition = "text")
     private String jobUniqueSellingPoints;
-    @Column(length = 2500)
+    @Lob
+    @Column(columnDefinition = "text")
     private String requirements;
-    @Column(length = 2500)
+    @Lob
+    @Column(columnDefinition = "text")
     private String offer;
-    @Column(length = 1000)
+    @Lob
+    @Column(columnDefinition = "text")
     private String contactInformation;
-    @OneToOne
-    @JoinColumn(name = "job_creation_uuid", referencedColumnName = "job_creation_uuid")
+    @OneToOne(mappedBy = "vacancyText")
     private JobCreationRequest jobCreationRequest;
-
-
 }

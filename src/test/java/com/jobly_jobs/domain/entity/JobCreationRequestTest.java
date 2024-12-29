@@ -17,7 +17,6 @@ class JobCreationRequestTest {
         JobCreationRequest jobCreationRequest = new JobCreationRequest();
 
         //then
-        assertNotNull(jobCreationRequest.getJobCreationId());
     }
 
     @Test
@@ -30,7 +29,6 @@ class JobCreationRequestTest {
 
         //then
         assertEquals("Software Engineer", jobTitle);
-        assertNotNull(jobCreationRequest.getJobCreationId());
         assertNotNull(jobCreationRequest.getFunctionGroup());
         assertNotNull(jobCreationRequest.getCompanyName());
         assertNotNull(jobCreationRequest.getMinSalary());
