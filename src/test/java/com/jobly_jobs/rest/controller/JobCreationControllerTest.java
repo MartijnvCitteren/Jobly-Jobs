@@ -44,7 +44,7 @@ class JobCreationControllerTest {
 
         // when & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/create")
+                        .post("/create/")
                         .contentType("application/json")
                         .content(convertToJsonString(jobCreationRequestDto)))
                 .andExpect(status().isCreated());
@@ -59,7 +59,7 @@ class JobCreationControllerTest {
 
         //when & then
         mockMvc.perform(MockMvcRequestBuilders
-                        .post("/create")
+                        .post("/create/")
                         .contentType("application/json")
                         .content(convertToJsonString(jobCreationRequestDto)))
                 .andExpect(status().isBadRequest())
