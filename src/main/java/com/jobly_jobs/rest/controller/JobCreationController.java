@@ -3,6 +3,7 @@ package com.jobly_jobs.rest.controller;
 import com.jobly_jobs.domain.dto.request.JobCreationRequestDto;
 import com.jobly_jobs.domain.dto.response.GeneratedVacancyDto;
 import com.jobly_jobs.domain.dto.response.JobCreationResponseDto;
+import com.jobly_jobs.facade.JobCreationFacade;
 import com.jobly_jobs.service.JobRequestService;
 import com.jobly_jobs.service.VacancyTextService;
 import jakarta.validation.Valid;
@@ -20,13 +21,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Log4j2
 @RequiredArgsConstructor
 public class JobCreationController {
-    private final VacancyTextService aiVacancyService;
+    private final JobCreationFacade jobCreationFacade;
     private final JobRequestService jobRequestService;
 
     @PostMapping("/create/")
     public ResponseEntity<GeneratedVacancyDto> generateVacancyText(@RequestBody @Valid JobCreationRequestDto descriptionInputDto) {
-        GeneratedVacancyDto generatedVacancy = aiVacancyService.generatedVacancyText(descriptionInputDto);
-        jobRequestService.createJobRequest(descriptionInputDto.generalInfo(), generatedVacancy);
+        GeneratedVacancyDto generatedVacancy = jobCreationFacade.generateVacancyText(descriptionInputDto);
         return new ResponseEntity<>(generatedVacancy, HttpStatus.CREATED);
     }
 

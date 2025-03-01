@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -24,6 +25,7 @@ import java.util.Optional;
 public class JobRequestService {
     private final JobCreationRepository jobCreationRepository;
 
+    @Transactional
     public void createJobRequest(GeneralJobDescriptionInfoDto jobInfo, GeneratedVacancyDto vacancyDto) {
         try {
             if (isUniqueJobRequest(jobInfo)) {
@@ -39,6 +41,7 @@ public class JobRequestService {
         }
     }
 
+    @Transactional
     public JobCreationResponseDto getJobRequest(long id) {
         System.out.println("get Job request with ID " + id + " Started");
         try {

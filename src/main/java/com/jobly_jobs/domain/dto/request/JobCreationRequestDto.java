@@ -1,5 +1,6 @@
 package com.jobly_jobs.domain.dto.request;
 
+import com.jobly_jobs.domain.enums.Language;
 import com.jobly_jobs.domain.enums.WritingStyle;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -17,6 +18,9 @@ public record JobCreationRequestDto(
         String teamDescription,
         @NotNull
         WritingStyle writingStyle,
+        @NotNull
+        Language language,
+
         @NotNull
         GeneralJobDescriptionInfoDto generalInfo
 ) {
