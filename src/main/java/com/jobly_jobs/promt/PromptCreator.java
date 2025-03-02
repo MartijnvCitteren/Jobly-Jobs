@@ -55,7 +55,8 @@ public class PromptCreator {
         sb.append(" and in this writing style: ");
         sb.append(inputDto.writingStyle());
         sb.append(writingStyleExample(inputDto.writingStyle()));
-        sb.append("Keep the text fairly easy to read and understand. Use short sentences and paragraphs. Aim to write on B2 or C1 level.");
+        sb.append("Keep the text fairly easy to read and understand. Use short sentences and paragraphs. Aim to write on B2 or C1 level." +
+                "Make sure the text is unique and not copied from other sources. Also make sure the text is about 1 A4 long. ");
         return sb.toString();
 
     }
