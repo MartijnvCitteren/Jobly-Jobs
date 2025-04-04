@@ -26,7 +26,8 @@ public class JobCreationMapper {
                 .maxSalary(jobCreationRequest.getMaxSalary())
                 .minSalary(jobCreationRequest.getMinSalary())
                 .functionGroup(jobCreationRequest.getFunctionGroup())
-                .vacancyText(jobCreationRequest.getVacancyText()).build();
+                .vacancyText(jobCreationRequest.getVacancyText())
+                .build();
     }
 }
 

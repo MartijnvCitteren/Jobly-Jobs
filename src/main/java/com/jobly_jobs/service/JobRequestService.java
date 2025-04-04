@@ -36,7 +36,7 @@ public class JobRequestService {
 
         } catch (DataAccessException e) {
             log.error("Error while saving job creation request for job: {} and company {}", jobInfo.jobTitle(),
-                    jobInfo.companyName());
+                      jobInfo.companyName());
             throw e;
         }
     }
@@ -46,7 +46,8 @@ public class JobRequestService {
         System.out.println("get Job request with ID " + id + " Started");
         try {
             JobCreationRequest jobCreationRequest = jobCreationRepository.findById(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Job creation request with id: " + id + " not found"));
+                    .orElseThrow(() -> new EntityNotFoundException(
+                            "Job creation request with id: " + id + " not " + "found"));
             return JobCreationMapper.toJobCreationResponseDto(jobCreationRequest);
         } catch (DataAccessException e) {
             log.error("Error while fetching job creation request with id: {}", id);
@@ -57,8 +58,8 @@ public class JobRequestService {
     private boolean isUniqueJobRequest(GeneralJobDescriptionInfoDto jobInfo) {
         if (findSimilarJobRequest(jobInfo).isPresent()) {
             JobCreationRequest foundJobRequest = findSimilarJobRequest(jobInfo).get();
-            String message = "This job creation request looks similar to a recent vacancy creation. " +
-                    "The similar request has job creation id: " + foundJobRequest.getId() + ".";
+            String message = "This job creation request looks similar to a recent vacancy creation. " + "The similar "
+                    + "request has job creation id: " + foundJobRequest.getId() + ".";
             log.info(message);
             throw new JobRequestAlreadyExists(message);
         }
@@ -66,7 +67,7 @@ public class JobRequestService {
     }
 
     private Optional<JobCreationRequest> findSimilarJobRequest(GeneralJobDescriptionInfoDto jobInfo) {
-        return jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(jobInfo.jobTitle(),
-                jobInfo.functionGroup(), jobInfo.companyName(), LocalDateTime.now().minusWeeks(2));
+        return jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(
+                jobInfo.jobTitle(), jobInfo.functionGroup(), jobInfo.companyName(), LocalDateTime.now().minusWeeks(2));
     }
 }

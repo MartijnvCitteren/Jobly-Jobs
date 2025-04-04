@@ -8,10 +8,11 @@ import java.math.BigDecimal;
 
 @Builder
 public record JobCreationResponseDto(
-    String jobTitle,
-    FunctionGroup functionGroup,
-    String companyName,
-    BigDecimal minSalary,
-    BigDecimal maxSalary,
-    VacancyText vacancyText
-) {}
+        String jobTitle,
+        FunctionGroup functionGroup,
+        String companyName,
+        BigDecimal minSalary,
+        BigDecimal maxSalary,
+        VacancyText vacancyText
+) {
+}

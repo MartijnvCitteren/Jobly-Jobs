@@ -5,7 +5,6 @@ import com.jobly_jobs.domain.dto.response.GeneratedVacancyDto;
 import com.jobly_jobs.domain.dto.response.JobCreationResponseDto;
 import com.jobly_jobs.facade.JobCreationFacade;
 import com.jobly_jobs.service.JobRequestService;
-import com.jobly_jobs.service.VacancyTextService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,7 +24,8 @@ public class JobCreationController {
     private final JobRequestService jobRequestService;
 
     @PostMapping("/create/")
-    public ResponseEntity<GeneratedVacancyDto> generateVacancyText(@RequestBody @Valid JobCreationRequestDto descriptionInputDto) {
+    public ResponseEntity<GeneratedVacancyDto> generateVacancyText(
+            @RequestBody @Valid JobCreationRequestDto descriptionInputDto) {
         GeneratedVacancyDto generatedVacancy = jobCreationFacade.generateVacancyText(descriptionInputDto);
         return new ResponseEntity<>(generatedVacancy, HttpStatus.CREATED);
     }
