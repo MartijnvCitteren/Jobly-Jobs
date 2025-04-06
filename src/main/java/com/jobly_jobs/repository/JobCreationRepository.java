@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface JobCreationRepository extends JpaRepository<JobCreationRequest, Long> {
 
     Optional<JobCreationRequest> findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(String jobTitle,
-                                                                                                  FunctionGroup functionGroup, String companyName, LocalDateTime createdAt);
-
-}
+                                                                                                  FunctionGroup functionGroup,
+                                                                                                  String companyName,
+                                                                                                  LocalDateTime createdAt);

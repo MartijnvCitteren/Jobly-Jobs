@@ -7,10 +7,10 @@ public class GeneratedVacancyDtoFactory {
         return GeneratedVacancyDto.builder()
                 .summary("This is a job summary")
                 .jobDescription("This is the job description")
-                .tasks("These are the tasks")
-                .team("This is the team")
-                .jobOffer("This is the job offer")
-                .aboutTheCompany("This is about the company");
+                .dayToDayDescription("These are the tasks")
+                .teamDescription("This is the team")
+                .jobDescription("This is the job offer")
+                .companyDescription("This is about the company");
 
     }
 }

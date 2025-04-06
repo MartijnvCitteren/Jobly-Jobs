@@ -27,9 +27,9 @@ class JobCreationRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        newJobCreationRequest = new JobCreationRequest(
-                "Software Engineer", FunctionGroup.ENGINEERING, "Google", BigDecimal.valueOf(1500), BigDecimal.valueOf(2000),
-                LocalDateTime.now(), LocalDateTime.now());
+        newJobCreationRequest = new JobCreationRequest("Software Engineer", FunctionGroup.ENGINEERING, "Google",
+                                                       BigDecimal.valueOf(1500), BigDecimal.valueOf(2000),
+                                                       LocalDateTime.now(), LocalDateTime.now());
         jobCreationRepository.save(newJobCreationRequest);
     }
 
@@ -56,7 +56,8 @@ class JobCreationRepositoryTest {
         LocalDateTime createdAt = LocalDateTime.now().minusDays(1);
 
         //when
-        Optional<JobCreationRequest> result = jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(
+        Optional<JobCreationRequest> result =
+                jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(
                 jobTitle, functionGroup, companyName, createdAt);
 
         //then

@@ -3,12 +3,11 @@ package com.jobly_jobs.rest.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.jobly_jobs.domain.dto.request.GeneralJobDescriptionInfoDto;
-import com.jobly_jobs.domain.dto.request.JobCreationRequestDto;
+import com.jobly_jobs.facade.JobCreationFacade;
 import com.jobly_jobs.factory.GeneralJobInfoDtoFactory;
+import com.jobly_jobs.factory.GeneratedVacancyDtoFactory;
 import com.jobly_jobs.factory.JobCreationRequestDtoFactory;
 import com.jobly_jobs.service.JobRequestService;
-import com.jobly_jobs.service.VacancyTextService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,50 +17,55 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(JobCreationController.class)
 @AutoConfigureMockMvc
 class JobCreationControllerTest {
-
-    @MockitoBean
-    VacancyTextService vacancyService;
-    @MockitoBean
-    JobRequestService jobRequestService;
     @InjectMocks
     JobCreationController jobCreationController;
+
     @Autowired
     MockMvc mockMvc;
+
+    @MockitoBean
+    private JobCreationFacade jobCreationFacade;
+
+    @MockitoBean
+    private JobRequestService jobRequestService;
 
     @Test
     void givenCorrectInput_whenCreate_thenReturnsStatusCreated() throws Exception {
         // given
-        GeneralJobDescriptionInfoDto generalInfo = GeneralJobInfoDtoFactory.createGeneralInfoDto().build();
-        JobCreationRequestDto jobCreationRequestDto = JobCreationRequestDtoFactory.createJobDescriptionInputDto()
+        var generalInfo = GeneralJobInfoDtoFactory.createGeneralInfoDto().build();
+        var creationRequest = JobCreationRequestDtoFactory.createJobDescriptionInputDto()
                 .generalInfo(generalInfo)
                 .build();
+        var generatedVacancyText = GeneratedVacancyDtoFactory.createGeneratedVacancyDto().build();
+        when(jobCreationFacade.generateVacancyText(creationRequest)).thenReturn(generatedVacancyText);
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/create")
-                        .contentType("application/json")
-                        .content(convertToJsonString(jobCreationRequestDto)))
-                .andExpect(status().isCreated());
+        mockMvc.perform(MockMvcRequestBuilders.post("/create/")
+                                .contentType("application/json")
+                                .content(convertToJsonString(creationRequest))).andExpect(status().isCreated());
+        verify(jobCreationFacade, times(1)).generateVacancyText(creationRequest);
     }
 
     @Test
     void givenRequestWithoutGeneralInfo_whenCreate_thenReturnsStatusIsBadRequest() throws Exception {
         // given
-        JobCreationRequestDto jobCreationRequestDto = JobCreationRequestDtoFactory.createJobDescriptionInputDto()
+        var jobCreationRequestDto = JobCreationRequestDtoFactory.createJobDescriptionInputDto()
                 .generalInfo(null)
                 .build();
 
         //when & then
-        mockMvc.perform(MockMvcRequestBuilders
-                        .post("/create")
-                        .contentType("application/json")
-                        .content(convertToJsonString(jobCreationRequestDto)))
+        mockMvc.perform(MockMvcRequestBuilders.post("/create/")
+                                .contentType("application/json")
+                                .content(convertToJsonString(jobCreationRequestDto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("{\"generalInfo\":\"must not be null\"}"));
     }
