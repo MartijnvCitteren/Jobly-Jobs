@@ -1,6 +1,7 @@
 package com.jobly_jobs.client;
 
 import com.jobly_jobs.domain.dto.response.GeneratedVacancyDto;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;

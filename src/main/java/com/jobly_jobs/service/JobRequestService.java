@@ -41,7 +41,6 @@ public class JobRequestService {
 
     @Transactional
     public JobCreationResponseDto getJobRequest(long id) {
-        System.out.println("get Job request with ID " + id + " Started");
         try {
             JobCreationRequest jobCreationRequest = jobCreationRepository.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException(
