@@ -13,7 +13,7 @@ pipeline {
         stage('Build Maven') {
             steps {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/MartijnvCitteren/Jobly-Jobs']])
-                sh 'mvn clean install'
+                sh 'mvn clean install -DskipTests'
             }
         }
 
@@ -49,7 +49,6 @@ pipeline {
                 }
             }
         }
-
         stage('Build Docker Image') {
             steps {
                 withCredentials([[$class: 'UsernamePasswordMultiBinding',
@@ -68,8 +67,8 @@ pipeline {
     }
     post {
         always {
-            junit '/target/surefire-reports/*.xml'
-            archiveArtifacts artifacts: '/target/*.jar', allowEmptyArchive: true
+            junit '**/target/surefire-reports/*.xml'
+            archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
         }
     }
 }

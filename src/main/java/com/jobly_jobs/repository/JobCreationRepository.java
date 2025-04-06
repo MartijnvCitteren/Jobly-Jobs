@@ -15,5 +15,3 @@ public interface JobCreationRepository extends JpaRepository<JobCreationRequest,
                                                                                                   FunctionGroup functionGroup,
                                                                                                   String companyName,
                                                                                                   LocalDateTime createdAt);
-
-}
