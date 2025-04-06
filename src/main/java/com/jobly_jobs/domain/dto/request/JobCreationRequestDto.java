@@ -14,7 +14,6 @@ public record JobCreationRequestDto(
         @Size(min = 10, max = 300, message = "Team description must be between 10 and 300 characters") String teamDescription,
         @NotNull WritingStyle writingStyle,
         @NotNull Language language,
-
         @NotNull GeneralJobDescriptionInfoDto generalInfo
 ) {
 }

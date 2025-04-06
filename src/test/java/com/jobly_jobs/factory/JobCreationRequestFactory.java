@@ -4,7 +4,6 @@ import com.jobly_jobs.domain.entity.JobCreationRequest;
 import com.jobly_jobs.domain.enums.FunctionGroup;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 public class JobCreationRequestFactory {
 

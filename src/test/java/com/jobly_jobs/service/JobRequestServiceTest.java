@@ -53,9 +53,12 @@ class JobRequestServiceTest {
         GeneralJobDescriptionInfoDto jobInfo = GeneralJobInfoDtoFactory.createGeneralInfoDto().build();
 
         // When
-        when(jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(
-                anyString(), any(FunctionGroup.class), anyString(), any(LocalDateTime.class))).thenReturn(Optional.empty());
-        jobRequestService.createJobRequest(jobInfo,vacancyDto);
+        when(jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(anyString(),
+                                                                                                    any(FunctionGroup.class),
+                                                                                                    anyString(),
+                                                                                                    any(LocalDateTime.class))).thenReturn(
+                Optional.empty());
+        jobRequestService.createJobRequest(jobInfo, vacancyDto);
 
         // Then
         verify(jobCreationRepository, times(1)).save(any(JobCreationRequest.class));
@@ -68,13 +71,16 @@ class JobRequestServiceTest {
         JobCreationRequest existingJobRequest = new JobCreationRequest();
 
         // When & Then
-        when(jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(
-                anyString(), any(FunctionGroup.class), anyString(), any(LocalDateTime.class)))
-                .thenReturn(Optional.of(existingJobRequest));
-        JobRequestAlreadyExists exception = assertThrows(JobRequestAlreadyExists.class, () ->
-                jobRequestService.createJobRequest(jobInfo, vacancyDto));
+        when(jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(anyString(),
+                                                                                                    any(FunctionGroup.class),
+                                                                                                    anyString(),
+                                                                                                    any(LocalDateTime.class))).thenReturn(
+                Optional.of(existingJobRequest));
+        JobRequestAlreadyExists exception = assertThrows(JobRequestAlreadyExists.class,
+                                                         () -> jobRequestService.createJobRequest(jobInfo, vacancyDto));
 
-        assertTrue(exception.getMessage().contains("This job creation request looks similar to a recent vacancy creation."));
+        assertTrue(exception.getMessage()
+                           .contains("This job creation request looks similar to a recent vacancy creation."));
         verify(jobCreationRepository, never()).save(any(JobCreationRequest.class));
     }
 
@@ -86,8 +92,11 @@ class JobRequestServiceTest {
         GeneralJobDescriptionInfoDto jobInfo = GeneralJobInfoDtoFactory.createGeneralInfoDto().build();
 
         // When & then
-        when(jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(
-                anyString(), any(FunctionGroup.class), anyString(), any(LocalDateTime.class))).thenThrow(dataAccessException);
+        when(jobCreationRepository.findByJobTitleAndFunctionGroupAndCompanyNameAndCreationDateAfter(anyString(),
+                                                                                                    any(FunctionGroup.class),
+                                                                                                    anyString(),
+                                                                                                    any(LocalDateTime.class))).thenThrow(
+                dataAccessException);
         assertThrows(DataAccessException.class, () -> jobRequestService.createJobRequest(jobInfo, vacancyDto));
     }
 

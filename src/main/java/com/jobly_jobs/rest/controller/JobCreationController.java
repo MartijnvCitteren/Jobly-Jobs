@@ -17,15 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-@Log4j2
 @RequiredArgsConstructor
 public class JobCreationController {
     private final JobCreationFacade jobCreationFacade;
     private final JobRequestService jobRequestService;
 
     @PostMapping("/create/")
-    public ResponseEntity<GeneratedVacancyDto> generateVacancyText(
-            @RequestBody @Valid JobCreationRequestDto descriptionInputDto) {
+    public ResponseEntity<GeneratedVacancyDto> generateVacancyText(@RequestBody @Valid JobCreationRequestDto descriptionInputDto) {
         GeneratedVacancyDto generatedVacancy = jobCreationFacade.generateVacancyText(descriptionInputDto);
         return new ResponseEntity<>(generatedVacancy, HttpStatus.CREATED);
     }

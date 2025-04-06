@@ -34,11 +34,13 @@ class GlobalExceptionHandlerTest {
     void givenMethodArgumentNotValidException_whenHandleMethodArgumentNotValidException_thenReturns400() {
         // given
         BindingResult bindingResult = mock(BindingResult.class);
-        MethodArgumentNotValidException methodArgumentNotValidException = new MethodArgumentNotValidException(null, bindingResult) {
+        MethodArgumentNotValidException methodArgumentNotValidException = new MethodArgumentNotValidException(null,
+                                                                                                              bindingResult) {
         };
 
         // when
-        ResponseEntity<Object> responseEntity = globalExceptionHandler.handleMethodArgumentNotValidException(methodArgumentNotValidException);
+        ResponseEntity<Object> responseEntity = globalExceptionHandler.handleMethodArgumentNotValidException(
+                methodArgumentNotValidException);
 
         // then
         assertEquals(400, responseEntity.getStatusCode().value());
