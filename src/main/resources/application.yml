@@ -6,10 +6,7 @@ spring:
   application:
     name: "Jobly-jobs"
     profiles:
-      active: "default"
-  datasource:
-    url: jdbc:postgresql://localhost:5432/jobly_jobs
-    driver-class-name: org.postgresql.Driver
+      active: "dev"
   jpa:
     hibernate:
       ddl-auto: update
@@ -19,7 +16,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   ai:
     openai:
-      api-key: ${OPEN_AI_KEY}
+      api-key: ${open-ai-key}
       chat:
         completions-path: v1/chat/completions
         options:

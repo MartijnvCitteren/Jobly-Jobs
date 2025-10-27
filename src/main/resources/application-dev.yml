@@ -1,0 +1,6 @@
+spring:
+  datasource:
+    url: jdbc:sqlserver://jobly-develop.database.windows.net:1433;
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    username: ${sql-admin-username}
+    password: ${sql-admin-password}
