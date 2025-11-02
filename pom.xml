@@ -148,19 +148,6 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>com.google.cloud.tools</groupId>
-				<artifactId>jib-maven-plugin</artifactId>
-				<version>3.3.2</version>
-				<configuration>
-					<from>
-						<image>openjdk:21-jdk</image>
-					</from>
-					<to>
-						<image>481665105260.dkr.ecr.eu-west-1.amazonaws.com/${project.artifactId}:latest</image>
-					</to>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 	<repositories>
