@@ -13,13 +13,6 @@ WORKDIR /app
 
 COPY --from=build /app/target/*.jar app.jar
 
-# Stel environment variables in (default values)
-ENV SPRING_PROFILES_ACTIVE=prod \
-    SERVER_PORT=8080 \
-    DB_URL=jdbc:postgresql://localhost:5432/mydb \
-    DB_USER=appuser \
-    DB_PASSWORD=changeme
-
-EXPOSE 8080
+EXPOSE 8090
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
