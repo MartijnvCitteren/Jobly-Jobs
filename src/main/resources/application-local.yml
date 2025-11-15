@@ -4,5 +4,5 @@ spring:
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
     properties:
       hibernate.dialect: org.hibernate.dialect.SQLServerDialect
-    username: ${SPRING_DATASOURCE_USERNAME}
     password: ${SPRING_DATASOURCE_PASSWORD}
+    username: ${SPRING_DATASOURCE_USERNAME}

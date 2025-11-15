@@ -5,6 +5,8 @@ server:
 spring:
   application:
     name: "Jobly-jobs"
+  profiles:
+    default: ${SPRING_PROFILES_ACTIVE:default}
 
   jpa:
     hibernate:
@@ -13,7 +15,7 @@ spring:
 
   ai:
     openai:
-      api-key: ${open-ai-key}
+      api-key: ${OPENAI_API_KEY}
       chat:
         completions-path: v1/chat/completions
         options:

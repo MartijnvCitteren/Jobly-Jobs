@@ -1,0 +1,8 @@
+services:
+  app:
+    image: martijnvcit/jobly-jobs:0.1.0
+    ports:
+      - "8090:8090"
+    env_file:
+      - .env.local
+    restart: unless-stopped
