@@ -58,7 +58,7 @@ class VacancyDescriptionJpaMapperTest {
 
     assertNotNull(result.getId());
     assertNotNull(result.getCreatedAt());
-    assertNotNull(result.getUpdatedAt());
+    assertNotNull(result.getLastModifiedAt());
     assertEquals(vacancyId, result.getVacancyId());
     assertEquals("Summary", result.getSummary());
     assertEquals(VacancyDescriptionSource.MANUAL, result.getSource());
