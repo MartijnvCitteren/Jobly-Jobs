@@ -166,4 +166,20 @@ class VacancyTest {
 
     assertTrue(vacancy.toString().contains("Backend Engineer"));
   }
+
+  @Test
+  @DisplayName("given vacancy with a description, when toString then description is excluded")
+  void givenVacancyWithDescriptionWhenToStringThenDescriptionIsExcluded() {
+    var description =
+        new VacancyDescription(
+            "Summary",
+            "Job description",
+            "Tasks",
+            "What we offer",
+            "About us",
+            VacancyDescriptionSource.MANUAL);
+    var vacancy = Vacancy.builder().description(description).build();
+
+    assertFalse(vacancy.toString().contains("Summary"));
+  }
 }

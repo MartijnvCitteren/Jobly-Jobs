@@ -29,10 +29,10 @@ class VacancyDescriptionResponseMapperTest {
 
     var result = mapper.toResponse(description);
 
-    assertEquals("Summary", result.getSummary());
-    assertEquals("Job description", result.getJobDescription());
-    assertEquals("Tasks", result.getTasks());
-    assertEquals("What we offer", result.getWhatWeOffer());
-    assertEquals("About us", result.getAboutUs());
+    assertEquals(description.summary(), result.getSummary());
+    assertEquals(description.jobDescription(), result.getJobDescription());
+    assertEquals(description.tasks(), result.getTasks());
+    assertEquals(description.whatWeOffer(), result.getWhatWeOffer());
+    assertEquals(description.aboutUs(), result.getAboutUs());
   }
 }

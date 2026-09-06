@@ -136,13 +136,11 @@ public class Vacancy extends BaseObject {
         + hoursPerWeek
         + ", status="
         + status
-        + ", description="
-        + description
         + '}';
   }
 
   public static class Builder {
-    private UUID id = UuidV7Generator.getUUID();
+    private UUID explicitId;
     private String jobTitle;
     private VacancyCategory category;
     private Location location;
@@ -154,7 +152,7 @@ public class Vacancy extends BaseObject {
     private Builder() {}
 
     public Builder id(UUID id) {
-      this.id = id;
+      this.explicitId = id;
       return this;
     }
 
@@ -194,6 +192,7 @@ public class Vacancy extends BaseObject {
     }
 
     public Vacancy build() {
+      UUID id = explicitId != null ? explicitId : UuidV7Generator.getUUID();
       return new Vacancy(
           id, jobTitle, category, location, workplaceType, hoursPerWeek, status, description);
     }

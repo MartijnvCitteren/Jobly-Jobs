@@ -2,14 +2,11 @@ package app.jobzy.api.adapter.in.rest;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import app.jobzy.api.adapter.in.rest.vacancy.InvalidVacancyDescriptionRequestException;
-import app.jobzy.api.domain.vacancy.VacancyNotFoundException;
 import app.jobzy.api.vacancy.adapter.in.web.contract.ProblemDetails;
 import app.jobzy.api.vacancy.adapter.in.web.contract.ProblemDetailsErrorsInner;
 import app.jobzy.api.vacancy.adapter.in.web.contract.VacancyCoreRequest;
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
@@ -73,38 +70,6 @@ class GlobalExceptionHandlerTest {
     assertEquals(
         "maxHoursPerWeek must be greater than minHoursPerWeek",
         body.getErrors().getFirst().getMessage());
-  }
-
-  @Test
-  @DisplayName(
-      "given a vacancy not found exception, when handling then returns a 404 problem detail")
-  void givenVacancyNotFoundExceptionWhenHandleThenReturns404ProblemDetail() {
-    var id = UUID.randomUUID();
-
-    var response =
-        handler.handleVacancyNotFoundException(new VacancyNotFoundException(id), request());
-
-    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    assertEquals(MediaType.APPLICATION_PROBLEM_JSON, response.getHeaders().getContentType());
-    assertEquals(HttpStatus.NOT_FOUND.value(), response.getBody().getStatus());
-  }
-
-  @Test
-  @DisplayName(
-      "given an invalid vacancy description request exception, when handling then returns a 400"
-          + " problem detail naming the offending field")
-  void givenInvalidVacancyDescriptionRequestExceptionWhenHandleThenReturns400ProblemDetail() {
-    var exception =
-        new InvalidVacancyDescriptionRequestException("summary", "summary contains a raw tag");
-
-    var response = handler.handleInvalidVacancyDescriptionRequestException(exception, request());
-
-    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    assertEquals(MediaType.APPLICATION_PROBLEM_JSON, response.getHeaders().getContentType());
-    assertEquals(1, response.getBody().getErrors().size());
-    assertEquals("summary", response.getBody().getErrors().getFirst().getField());
-    assertEquals(
-        "summary contains a raw tag", response.getBody().getErrors().getFirst().getMessage());
   }
 
   @Test

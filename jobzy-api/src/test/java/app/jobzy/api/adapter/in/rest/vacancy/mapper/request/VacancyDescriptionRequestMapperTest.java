@@ -30,10 +30,10 @@ class VacancyDescriptionRequestMapperTest {
     var result = mapper.toCommand(id, request);
 
     assertEquals(id, result.vacancyId());
-    assertEquals("Summary", result.summary());
-    assertEquals("Job description", result.jobDescription());
-    assertEquals("Tasks", result.tasks());
-    assertEquals("What we offer", result.whatWeOffer());
-    assertEquals("About us", result.aboutUs());
+    assertEquals(request.getSummary(), result.summary());
+    assertEquals(request.getJobDescription(), result.jobDescription());
+    assertEquals(request.getTasks(), result.tasks());
+    assertEquals(request.getWhatWeOffer(), result.whatWeOffer());
+    assertEquals(request.getAboutUs(), result.aboutUs());
   }
 }
