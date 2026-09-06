@@ -1,10 +1,12 @@
 package app.jobzy.api.adapter.out.persistence.vacancy;
 
+import app.jobzy.api.adapter.out.persistence.BaseJpaEntity;
 import app.jobzy.api.domain.vacancy.valueobject.VacancyDescriptionSource;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
-import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +19,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-public class VacancyDescriptionJpaEntity {
+public class VacancyDescriptionJpaEntity extends BaseJpaEntity {
   @Id private UUID id;
 
   @Column(unique = true)
@@ -28,7 +30,7 @@ public class VacancyDescriptionJpaEntity {
   private String tasks;
   private String whatWeOffer;
   private String aboutUs;
+
+  @Enumerated(EnumType.STRING)
   private VacancyDescriptionSource source;
-  private LocalDateTime createdAt;
-  private LocalDateTime updatedAt;
 }

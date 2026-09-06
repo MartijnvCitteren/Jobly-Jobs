@@ -1,9 +1,12 @@
 package app.jobzy.api.adapter.out.persistence.vacancy.mapper;
 
+import static app.jobzy.api.shared.Constants.AMS_TIME_ZONE_ID;
+
 import app.jobzy.api.adapter.out.persistence.vacancy.VacancyDescriptionJpaEntity;
 import app.jobzy.api.domain.UuidV7Generator;
 import app.jobzy.api.domain.vacancy.valueobject.VacancyDescription;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.UUID;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.Mapper;
@@ -50,7 +53,7 @@ public interface VacancyDescriptionJpaMapper {
     entity.setWhatWeOffer(description.whatWeOffer());
     entity.setAboutUs(description.aboutUs());
     entity.setSource(description.source());
-    entity.setUpdatedAt(LocalDateTime.now());
+    entity.setLastModifiedAt(LocalDateTime.now(ZoneId.of(AMS_TIME_ZONE_ID)));
     return entity;
   }
 }

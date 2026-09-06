@@ -1,5 +1,9 @@
 package app.jobzy.api.shared;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Constants {
   public static final String AMS_TIME_ZONE_ID = "Europe/Amsterdam";
 
