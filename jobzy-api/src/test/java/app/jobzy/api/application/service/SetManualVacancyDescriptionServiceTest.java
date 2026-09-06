@@ -48,11 +48,11 @@ class SetManualVacancyDescriptionServiceTest {
 
     var result = service.setManualDescription(command);
 
-    assertEquals("Summary", result.getDescription().summary());
-    assertEquals("Job description", result.getDescription().jobDescription());
-    assertEquals("Tasks", result.getDescription().tasks());
-    assertEquals("What we offer", result.getDescription().whatWeOffer());
-    assertEquals("About us", result.getDescription().aboutUs());
+    assertEquals(command.summary(), result.getDescription().summary());
+    assertEquals(command.jobDescription(), result.getDescription().jobDescription());
+    assertEquals(command.tasks(), result.getDescription().tasks());
+    assertEquals(command.whatWeOffer(), result.getDescription().whatWeOffer());
+    assertEquals(command.aboutUs(), result.getDescription().aboutUs());
     assertEquals(VacancyDescriptionSource.MANUAL, result.getDescription().source());
     verify(vacancyRepository).save(vacancy);
   }

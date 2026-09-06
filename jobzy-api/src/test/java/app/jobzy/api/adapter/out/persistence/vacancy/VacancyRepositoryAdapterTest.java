@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -27,6 +28,7 @@ class VacancyRepositoryAdapterTest {
 
   @Autowired private VacancyRepositoryAdapter vacancyRepositoryAdapter;
   @Autowired private VacancyDescriptionJpaRepository descriptionJpaRepository;
+  @Autowired private TestEntityManager entityManager;
 
   @Test
   @DisplayName(
@@ -74,6 +76,9 @@ class VacancyRepositoryAdapterTest {
 
     var reloaded = vacancyRepositoryAdapter.findById(vacancy.getId()).orElseThrow();
     assertEquals(secondDescription, reloaded.getDescription());
+    // With the shared-PK relation (ADR 0005), this also proves a structural guarantee: a second
+    // row for the same vacancy is not representable, since the description row's PK is the
+    // vacancy's id, not the accidental result of an upsert lookup happening to succeed.
     assertEquals(1, descriptionJpaRepository.count());
   }
 
@@ -87,6 +92,29 @@ class VacancyRepositoryAdapterTest {
     vacancyRepositoryAdapter.save(vacancy);
     var reloaded = vacancyRepositoryAdapter.findById(vacancy.getId()).orElseThrow();
 
+    assertNull(reloaded.getDescription());
+    assertTrue(descriptionJpaRepository.findByVacancyId(vacancy.getId()).isEmpty());
+  }
+
+  @Test
+  @DisplayName(
+      "given a vacancy with an existing description, when saved again with description set to"
+          + " null then the description row is deleted")
+  void givenVacancyWithExistingDescriptionWhenSavedAgainWithNullDescriptionThenRowIsDeleted() {
+    var description =
+        new VacancyDescription("Summary", null, null, null, null, VacancyDescriptionSource.MANUAL);
+    var vacancy = VacancyFactory.getFilledCoreVacancy().description(description).build();
+    vacancyRepositoryAdapter.save(vacancy);
+
+    vacancy.setDescription(null);
+    vacancyRepositoryAdapter.save(vacancy);
+    // Flush/clear required to bypass the persistence-context cache and verify the explicit
+    // deleteById call in the adapter actually removed the row from the database (orphanRemoval
+    // does not fire on freshly-built transient graphs, so the deletion is explicit, not cascaded).
+    entityManager.flush();
+    entityManager.clear();
+
+    var reloaded = vacancyRepositoryAdapter.findById(vacancy.getId()).orElseThrow();
     assertNull(reloaded.getDescription());
     assertTrue(descriptionJpaRepository.findByVacancyId(vacancy.getId()).isEmpty());
   }

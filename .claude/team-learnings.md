@@ -59,3 +59,66 @@ on this team reads this file before starting work — keep entries concrete and 
   Flagging here so it isn't silently rediscovered and hand-patched the same way on every future run.
 - When an idle-notification comes in for a teammate mid-verification-run (e.g. mid `mvn test`), treat it
   as expected rather than reflexively escalating to a duplicate agent spawn — see the fix above.
+
+## 2026-09-06 — PR #80 review-feedback fix cycle
+
+**What worked**
+- Skipping Speckit for a "fix reviewer feedback" cycle and scoping directly from the review comments
+  (`.claude/planning/pr-80-feedback.md`) worked fine because the comments (RC-1 through RC-8) were
+  bounded and explicit enough to plan from without a full spec. Not every change needs the full
+  spec→plan→tasks pipeline — a review-comment list can be a sufficient planning input on its own when
+  it's this concrete. Don't default to Speckit reflexively for feedback-fix cycles; ask.
+- The architect verified which review comments were already resolved by *reading current file state*
+  (RC-1 through RC-6 turned out to already be fixed by commit `2d7f7a2`) instead of trusting the
+  review-comment list at face value. This avoided planning six no-op tasks. Always re-verify a review
+  comment against the live file before turning it into a task — comment lists go stale the moment any
+  commit lands after they were written.
+- RC-7 (introduce `@OneToOne` between `Vacancy`/`VacancyDescription`) directly reversed a prior explicit
+  decision (ADR 0004 Decision 1, which had rejected `@OneToOne`). The architect wrote ADR 0005 with a
+  design (shared-PK relation) that answered ADR 0004's original lazy-loading/cascade objection, but
+  did **not** silently override the earlier ADR — it flagged the reversal, and a second scope item
+  (JPA auditing as a prerequisite), for explicit human sign-off via the team lead. Both were approved
+  as proposed. Reinforcing the pattern from the 2026-09-05 entry: a decision that reverses a prior ADR
+  must be flagged for explicit re-confirmation, never quietly overwritten just because a new reviewer
+  disagreed with the old one.
+- Mid-implementation, the developer discovered the plan/ADR 0005 was wrong about an implementation
+  mechanic: `orphanRemoval` doesn't fire when Hibernate merges a freshly-built transient parent graph
+  (no prior loaded snapshot to diff against) — verified empirically via SQL logging with an explicit
+  flush showing no `DELETE` was emitted. Rather than either blindly following the wrong plan or silently
+  deviating, the developer kept the plan's overall shape, added a narrowly-scoped `deleteById()` call
+  on just the null-description branch, and surfaced the finding to the architect, who documented it as
+  an ADR 0005 addendum instead of leaving the design doc wrong. Good pattern to repeat: a plan/ADR can
+  be correct on architecture but wrong on framework-level mechanics that only surface once you actually
+  try it — the fix is an addendum to the doc plus a proactive heads-up, not silent deviation and not
+  dogmatic adherence to a plan proven wrong by evidence.
+
+**What wasted tokens or time**
+- **Near-miss**: the documentation-writer started its pass, ran `git status`/diff-equivalent checks,
+  and found all of the feature's implementation work still uncommitted (this team doesn't commit
+  mid-feature — see prior entry's note that even review sign-off gets hand-recorded in the plan file
+  rather than as a commit). It misread "not committed" as "not actually implemented," and self-reported
+  a false "critical issue" — claiming credit/blame for having itself implemented production code (the
+  `@OneToOne` redesign, the adapter rewrite) when its actual edits were only Javadoc and one clarifying
+  test comment, exactly as scoped. The team lead had to stop and diff the actual files by hand to
+  confirm no revert was needed, costing a few round-trips (doc-writer alarm → team lead verification →
+  all-clear) even though no actual harm occurred, since the doc-writer correctly stopped and asked
+  rather than trying to unilaterally "fix" what it thought was wrong.
+- **Root cause**: the doc-writer's mental model assumed "uncommitted at the point I start my pass" is
+  anomalous, when on this team it's the norm — nothing is committed until the final review-gate task
+  completes. It also had no earlier commit to diff its own edits against, so it couldn't tell "already
+  there before I touched it" apart from "my own edit" just by staring at working-tree state.
+
+**What to change**
+- **Doc-writer (and any late-stage teammate that reads working-tree state at task start)**: before
+  concluding that uncommitted code implies a process violation or missing implementation, check whether
+  this team's convention is "commit only at the final review-gate" (it is, per this and the prior
+  entry) — uncommitted-but-present code mid-feature is expected, not evidence of anything wrong. If a
+  late-stage agent needs to distinguish "pre-existing work" from "my own edit," it should diff against
+  its own tool-call history/edits in this conversation (what *it* wrote), not against git history that
+  doesn't exist yet — and if genuinely unsure, ask the team lead directly ("is X already implemented or
+  did I just write it?") rather than self-reporting a critical issue as fact.
+- Consider whether task-list checkpoints (e.g. after each numbered task in a plan like
+  `pr-80-feedback.md`) warrant a lightweight intermediate commit specifically so any teammate joining
+  later in the cycle has something concrete to diff against — this is a real, recurring cost (two
+  retros in a row have now hit friction from the no-commit-until-the-end convention) and is worth
+  weighing against this team's evident preference for a single clean final commit per feature.

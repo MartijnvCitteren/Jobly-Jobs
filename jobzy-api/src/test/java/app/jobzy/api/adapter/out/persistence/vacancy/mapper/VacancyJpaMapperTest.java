@@ -49,12 +49,13 @@ class VacancyJpaMapperTest {
 
   @Test
   @DisplayName(
-      "given vacancy entity and description entity, when toDomain then maps every field"
-          + " including the description")
-  void givenVacancyEntityAndDescriptionEntityWhenToDomainThenMapsEveryFieldIncludingDescription() {
+      "given vacancy entity with a description, when toDomain then maps every field including"
+          + " the description")
+  void givenVacancyEntityWithDescriptionWhenToDomainThenMapsEveryFieldIncludingDescription() {
     var vacancy = VacancyFactory.getFilledCoreVacancy().build();
     var vacancyEntity = mapper.toJpaEntity(vacancy);
     var descriptionEntity = new VacancyDescriptionJpaEntity();
+    vacancyEntity.setDescription(descriptionEntity);
     var domainDescription =
         new VacancyDescription(
             "Summary",
@@ -65,7 +66,7 @@ class VacancyJpaMapperTest {
             VacancyDescriptionSource.MANUAL);
     when(descriptionMapper.toDomain(descriptionEntity)).thenReturn(domainDescription);
 
-    var result = mapper.toDomain(vacancyEntity, descriptionEntity);
+    var result = mapper.toDomain(vacancyEntity);
 
     assertEquals(vacancyEntity.getId(), result.getId());
     assertEquals(vacancyEntity.getJobTitle(), result.getJobTitle());
@@ -78,13 +79,12 @@ class VacancyJpaMapperTest {
   }
 
   @Test
-  @DisplayName(
-      "given vacancy entity and no description entity, when toDomain then description is null")
-  void givenVacancyEntityAndNoDescriptionEntityWhenToDomainThenDescriptionIsNull() {
+  @DisplayName("given vacancy entity with no description, when toDomain then description is null")
+  void givenVacancyEntityWithNoDescriptionWhenToDomainThenDescriptionIsNull() {
     var vacancy = VacancyFactory.getFilledCoreVacancy().build();
     var vacancyEntity = mapper.toJpaEntity(vacancy);
 
-    var result = mapper.toDomain(vacancyEntity, null);
+    var result = mapper.toDomain(vacancyEntity);
 
     assertNull(result.getDescription());
   }

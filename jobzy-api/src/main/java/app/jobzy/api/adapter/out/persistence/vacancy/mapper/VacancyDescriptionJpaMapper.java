@@ -1,14 +1,7 @@
 package app.jobzy.api.adapter.out.persistence.vacancy.mapper;
 
-import static app.jobzy.api.shared.Constants.AMS_TIME_ZONE_ID;
-
 import app.jobzy.api.adapter.out.persistence.vacancy.VacancyDescriptionJpaEntity;
-import app.jobzy.api.domain.UuidV7Generator;
 import app.jobzy.api.domain.vacancy.valueobject.VacancyDescription;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.UUID;
-import org.jspecify.annotations.Nullable;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -28,32 +21,12 @@ public interface VacancyDescriptionJpaMapper {
   VacancyDescription toDomain(VacancyDescriptionJpaEntity entity);
 
   /**
-   * Map domain VO to JPA entity, performing upsert logic: reuse the existing entity's id and
-   * createdAt if it exists (update case), or generate fresh ones if null (insert case). This
-   * ensures multiple writes for the same vacancy update the same row, not accumulate duplicates.
+   * Map a domain VO to a JPA entity, mapping the five text fields and {@code source} only. The
+   * {@code id}/{@code vacancy} relation is wired by the adapter, and {@code createdAt}/{@code
+   * lastModifiedAt} are populated by JPA auditing.
    *
-   * @param vacancyId the vacancy id to associate
    * @param description the domain VO
-   * @param existing the existing entity if any, or null for insert
-   * @return the entity ready to persist
+   * @return the entity ready to be wired onto its parent vacancy
    */
-  default VacancyDescriptionJpaEntity toJpaEntity(
-      UUID vacancyId,
-      VacancyDescription description,
-      @Nullable VacancyDescriptionJpaEntity existing) {
-    var entity = existing != null ? existing : new VacancyDescriptionJpaEntity();
-    if (existing == null) {
-      entity.setId(UuidV7Generator.getUUID());
-      entity.setCreatedAt(LocalDateTime.now());
-    }
-    entity.setVacancyId(vacancyId);
-    entity.setSummary(description.summary());
-    entity.setJobDescription(description.jobDescription());
-    entity.setTasks(description.tasks());
-    entity.setWhatWeOffer(description.whatWeOffer());
-    entity.setAboutUs(description.aboutUs());
-    entity.setSource(description.source());
-    entity.setLastModifiedAt(LocalDateTime.now(ZoneId.of(AMS_TIME_ZONE_ID)));
-    return entity;
-  }
+  VacancyDescriptionJpaEntity toJpaEntity(VacancyDescription description);
 }
